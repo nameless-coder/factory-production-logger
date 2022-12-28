@@ -6,6 +6,11 @@ services:
     container_name: mongo
     image: mongo
     restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./data:/data/db
 
   mongo-express:
     container_name: mongo-express
@@ -16,14 +21,15 @@ services:
     environment:
       ME_CONFIG_OPTIONS_EDITORTHEME: "ambiance"
       ME_CONFIG_MONGODB_SERVER: "mongo"
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_MONGODB_ADMINUSERNAME: "root"
+      ME_CONFIG_MONGODB_ADMINPASSWORD: "example"
       ME_CONFIG_BASICAUTH_USERNAME: "user"
       ME_CONFIG_BASICAUTH_PASSWORD: "long password"
 
-  scraper:
+  logger:
     container_name: logger
-    image: logger
+    image: ghcr.io/nameless-coder/factory-production-logger:latest
     restart: always
-    build:
-      context: .
     ports:
       - 8000:8000
