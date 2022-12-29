@@ -9,7 +9,7 @@ api = FastAPI(docs_url=None, redoc_url="/docs")
 
 settings = Settings()
 
-api.include_router(production_run_router)
+api.include_router(production_run_router, prefix="/productionrun")
 
 
 @api.on_event("startup")

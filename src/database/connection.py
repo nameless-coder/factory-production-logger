@@ -25,8 +25,10 @@ class Database:
         self.model = model
 
     async def save(self, document):
-        await document.create()
-        return
+        doc = await document.create()
+        if doc:
+            return doc
+        return False
 
     async def get(self, id: PydanticObjectId) -> bool:
         doc = await self.model.get(id)

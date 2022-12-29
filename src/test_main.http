@@ -4,3 +4,25 @@ GET http://127.0.0.1:8000/
 Accept: application/json
 
 ###
+
+GET http://127.0.0.1:8000/productionrun
+Accept: application/json
+
+###
+
+POST http://127.0.0.1:8000/productionrun/new
+Content-Type: application/json
+
+{
+  "pr_id": "FA-01",
+  "name": "1st production run",
+  "description": "Testing the equipment!"
+}
+
+###
+
+GET http://127.0.0.1:8000/productionrun
+Accept: application/json
+
+###
+
