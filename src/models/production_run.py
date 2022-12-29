@@ -1,8 +1,9 @@
 from datetime import datetime
+from beanie import Document
 from pydantic import BaseModel
 
 
-class ProductionRun(BaseModel):
+class ProductionRun(Document):
     id: int
     name: str
     dt: datetime = None
