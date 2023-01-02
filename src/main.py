@@ -1,11 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from database.connection import Settings
 
 from routes.production_run import production_run_router
 
 import uvicorn
 
-api = FastAPI(docs_url=None, redoc_url="/docs")
+api = FastAPI(docs_url="/swagger", redoc_url="/docs")
 
 settings = Settings()
 
@@ -17,7 +17,10 @@ async def init_db():
     await settings.initialize_database()
 
 
-@api.get('/')
+@api.get('/',
+         response_description="Welcome page",
+         status_code=status.HTTP_200_OK,
+         tags=["Home"])
 async def home() -> dict:
     return {
         'message': 'Welcome to Factory Production Logger API!'

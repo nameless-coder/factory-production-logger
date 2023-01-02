@@ -1,7 +1,7 @@
 from typing import Optional, Any, List
 
 from beanie import init_beanie, PydanticObjectId
-from models.production_run import ProductionRun
+from models.production_run import ProductionRun, ProductionRunItem
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseSettings, BaseModel
@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(database=client.get_default_database(),
-                          document_models=[ProductionRun])
+                          document_models=[ProductionRun, ProductionRunItem])
 
     class Config:
         env_file = ".env"
@@ -39,6 +39,17 @@ class Database:
     async def get_all(self) -> List[Any]:
         docs = await self.model.find_all().to_list()
         return docs
+
+    async def find_one_pr_id(self, pr_id: str) -> Any:
+        class ProductRunID(BaseModel):
+            pr_id: str
+
+        body = ProductRunID()
+
+        doc = await self.model.find_one(body.pr_id == pr_id)
+        if not doc:
+            return False
+        return doc
 
     async def update(self, id: PydanticObjectId, body: BaseModel) -> Any:
         doc_id = id
